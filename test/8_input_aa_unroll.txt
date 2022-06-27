@@ -1,0 +1,22 @@
+# LBM proxy app input file
+
+# Problem size scales with cube of simulationSize
+simulationSize 8.0
+
+# LBM propagation pattern: AB = 0, AA = 1, MR = 2
+propPattern 1
+
+# Pull? (only for AB): default = 0 for Push, set to 1 for Pull
+pull 0
+
+#Unroll?
+unroll 1
+
+# Density change   (rho_inlet = 1+densityChange, rho_outlet = 1)
+densityChange 0.01
+
+# Output VTK for visualization: default no = 0
+writevtk 0
+
+# Number of timesteps
+timesteps 1000
