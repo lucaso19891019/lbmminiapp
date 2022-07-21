@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <mpi.h>
 
@@ -124,7 +123,7 @@ void PropagationAA::initialize(void)
 }
 
 /******************************************************************************/
-/*void PropagationAA::run(void)
+void PropagationAA::run(void)
 {
 
    initialize();
@@ -216,7 +215,7 @@ void PropagationAA::initialize(void)
 }
 
 /******************************************************************************/
-/*Pdf PropagationAA::getRho(int fluidIdx, int currentStep)
+Pdf PropagationAA::getRho(int fluidIdx, int currentStep)
 {
    Pdf rho = 0.0;
    int nFluid = geometry_.getNumFluidPts();
@@ -260,7 +259,7 @@ void PropagationAA::initialize(void)
 }
 
 /******************************************************************************/
-/*vector<Pdf> PropagationAA::getVelocity(int fluidIdx, int currentStep)
+vector<Pdf> PropagationAA::getVelocity(int fluidIdx, int currentStep)
 {
    Pdf rho = 0.0;
    vector<Pdf> vel(_DIMS_, 0.0);
@@ -326,4 +325,5 @@ void PropagationAA::initialize(void)
 
    return vel;
 }
+
 /******************************************************************************/

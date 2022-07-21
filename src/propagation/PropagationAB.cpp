@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <mpi.h>
 
@@ -191,7 +190,7 @@ void PropagationAB::run(void)
 #endif
 #ifdef USE_SYCL
       q_.wait();
-#elif defined (USE_KOKKOS)
+#elif defined(USE_KOKKOS)
       Kokkos::fence();
 #endif
    MPI_Barrier(MPI_COMM_WORLD);
