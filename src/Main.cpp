@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 #else
    Communication comm(*lattice, *geometry, parameters);
 #endif
-
+   ;
    // setup propagation
    Propagation* prop = NULL;
    if (propPattern == 0)
@@ -89,6 +89,10 @@ int main(int argc, char** argv)
       {
          comm.identifyNeighbors();
          comm.identifyPatternAB();
+      }
+      else
+      {
+	 comm.kokkosSyclNoNeighborSetup();
       }
 #if defined(USE_SYCL)
 	prop = new PropagationAB(*lattice, *geometry, comm, parameters,q);
@@ -104,6 +108,11 @@ int main(int argc, char** argv)
          comm.identifyNeighbors();
          comm.identifyPatternAA();
       }
+      else
+      {
+	 comm.kokkosSyclNoNeighborSetup();
+      }
+
 #if defined(USE_SYCL)
 	prop = new PropagationAA(*lattice, *geometry, comm, parameters,q);
 #else

@@ -22,8 +22,9 @@ Communication::Communication(Lattice& lattice, Geometry& geometry, Parameters& p
    interactDist_ = lattice_.interactDistance;
 
    commLength_ = 0;
-
+   numNbrs_ = 0;
 }
+
 
 /******************************************************************************/
 void Communication::identifyNeighbors()
@@ -297,7 +298,7 @@ void Communication::setupBuffers(vector<vector<int> >& locsToSend, vector<vector
          counterComm++;
       }
    }
-/*#if defined(USE_SYCL)
+#if defined(USE_SYCL)
     locsToSend_d_=sycl::malloc_device<int>(commLength_,q_);
     locsToRecv_d_=sycl::malloc_device<int>(commLength_,q_);
     q_.memcpy(locsToSend_d_,locsToSend_,commLength_*sizeof(int));
@@ -310,13 +311,13 @@ void Communication::setupBuffers(vector<vector<int> >& locsToSend, vector<vector
    bufferSend_ = myViewPDF("bufferSend_",commLength_);
    bufferRecv_ = myViewPDF("bufferRecv_",commLength_);
 #elif defined(USE_SYCL)
-	bufferSend_=sycl::malloc_device<Pdf>(commLength_,q_);
-	bufferRecv_=sycl::malloc_device<Pdf>(commLength_,q_);
+   bufferSend_=sycl::malloc_device<Pdf>(commLength_,q_);
+   bufferRecv_=sycl::malloc_device<Pdf>(commLength_,q_);
 #else
    bufferSend_ = new Pdf[commLength_];
    bufferRecv_ = new Pdf[commLength_];
    fill(bufferSend_, bufferSend_+commLength_, 0.0);
-   fill(bufferRecv_, bufferRecv_+commLength_, 0.0);*/
+   fill(bufferRecv_, bufferRecv_+commLength_, 0.0);
 #endif
 
    bufferStartByNbr_.resize(numNbrs_);
@@ -331,6 +332,23 @@ void Communication::setupBuffers(vector<vector<int> >& locsToSend, vector<vector
 
    return;
 }
+/******************************************************************************/
+void Communication::kokkosSyclNoNeighborSetup()
+{
+#if defined(USE_SYCL)
+   locsToSend_d_=sycl::malloc_device<int>(commLength_,q_);
+   locsToRecv_d_=sycl::malloc_device<int>(commLength_,q_);
+   bufferSend_=sycl::malloc_device<Pdf>(commLength_,q_);
+   bufferRecv_=sycl::malloc_device<Pdf>(commLength_,q_);
+#endif
+#if defined(USE_KOKKOS)
+   locsToSend_d_ = myViewInt("locsToSend_d_",commLength);
+   locsToRecv_d_ = myViewInt("locsToRecv_d_",commLength);
+   bufferSend_ = myViewPDF("bufferSend_",commLength_);
+   bufferRecv_ = myViewPDF("bufferRecv_",commLength_);
+#endif
+}
+
 
 /******************************************************************************/
 void Communication::removeRejectedPts(vector<vector<int> >& sendRejectsByTask, vector<vector<int> >& locsToSend)
@@ -361,7 +379,7 @@ void Communication::removeRejectedPts(vector<vector<int> >& sendRejectsByTask, v
 void Communication::exchange(Pdf* dstrb)
 
 {
-/*#ifdef USE_KOKKOS
+#ifdef USE_KOKKOS
    
    Kokkos::parallel_for(myPolicy(0, commLength_),KOKKOS_CLASS_LAMBDA (const int commIdx)
    {
@@ -459,7 +477,7 @@ void Communication::exchange(Pdf* dstrb)
 #endif
 
    return;
-*/
+
 }
 
 /******************************************************************************/

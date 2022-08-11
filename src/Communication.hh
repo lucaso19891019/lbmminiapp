@@ -17,16 +17,17 @@ class Communication
 #endif
       ~Communication(void) {
 #if defined(USE_SYCL)
-//	sycl::free(bufferSend_,q_);
-//	sycl::free(bufferRecv_,q_);
-//	sycl::free(locsToSend_d_,q_);
-//	sycl::free(locsToRecv_d_,q_);
+	sycl::free(bufferSend_,q_);
+	sycl::free(bufferRecv_,q_);
+	sycl::free(locsToSend_d_,q_);
+	sycl::free(locsToRecv_d_,q_);
 #endif
 };
 
       void identifyNeighbors(void);
       void identifyPatternAB(void);
       void identifyPatternAA(void);
+      void kokkosSyclNoNeighborSetup(void);
       void exchange(Pdf* dstrb);
 
 
